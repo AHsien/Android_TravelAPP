@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!--
 android:largeHeap="true"
@@ -14,7 +14,7 @@ android:largeHeap="true"
     -->
     <application
         android:allowBackup="true"
-        android:icon="@drawable/logo"
+        android:icon="@mipmap/ic_icon2"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -35,8 +35,7 @@ android:largeHeap="true"
 
         <activity
             android:name=".SettingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ProfileActivity"
             android:screenOrientation="portrait" />
@@ -54,22 +53,21 @@ android:largeHeap="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".HomePageActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".DetailHomeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".LoginPage"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MessagePage"
             android:screenOrientation="portrait" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -122,6 +120,7 @@ android:largeHeap="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity android:name=".ShowStickerActivity" />
+
         <activity android:name=".WelcomPageActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -130,6 +129,7 @@ android:largeHeap="true"
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
+        <activity android:name=".PhotoAlbumActivity" />
     </application>
 
 </manifest>

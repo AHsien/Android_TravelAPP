@@ -2,27 +2,50 @@
 <LinearLayout
     android:id="@+id/themes_main"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
 
-    <ListView
-        android:id="@+id/themes_list"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:title="背景顏色"
+        app:titleTextColor="#fff"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
-        />
+        android:layout_weight="1"
+        android:background="#4f4f4f"
+        android:layout_alignParentTop="true" />
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.7"
-        android:text="套用"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        android:onClick="apply"
-        />
+        android:layout_weight="8"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/themes_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            />
+
+        <cyd.awesome.material.AwesomeButton
+            xmlns:awesome="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/setBackgroundColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="套用"
+            android:textSize="18sp"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            awesome:awesome_type="bootstrap_success"
+            awesome:awesome_rounded_corners="true"
+            awesome:awesome_icon_right="FA_SAVE"
+            awesome:awesome_icon="FA_HOME"
+            awesome:awesome_font="font_awesome"/>
+
+    </LinearLayout>
 
 </LinearLayout>

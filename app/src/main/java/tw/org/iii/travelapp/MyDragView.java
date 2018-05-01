@@ -29,6 +29,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cyd.awesome.material.AwesomeButton;
+
 /**
  * Created by User on 2018/4/11.
  */
@@ -41,7 +43,7 @@ public class MyDragView extends LinearLayout{
     private SimpleAdapter simpleAdapter;
     private int upOrdown;
     private int  screenWidth,screenHeight;
-
+    private AwesomeButton awesomeButton;
     private ArrayList<DataStation> dataList;
     private Context drawView_context;
 
@@ -72,6 +74,11 @@ public class MyDragView extends LinearLayout{
     //返回 MyListView
     public MyListView getListView(){
         return listView;
+    }
+
+    public AwesomeButton getAwesomeButton(){
+        awesomeButton = myView.findViewById(R.id.gotoMap);
+        return awesomeButton;
     }
     //初始化MyListView
     private void intitListView(){

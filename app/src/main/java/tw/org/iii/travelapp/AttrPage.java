@@ -45,7 +45,7 @@ public class AttrPage extends ListFragment {
     private String jstring;
     private JSONObject jsonObject;
     private MylistAdapter adapter;
-    private Button mesbtn,addbtn;
+    private ImageView mesbtn,addbtn;
     private float screenWidth,screenHeight,newHeight;
     private RequestQueue queue;
     private FrameLayout backgroundColor;
@@ -67,7 +67,7 @@ public class AttrPage extends ListFragment {
         backgroundColor = (FrameLayout)v.findViewById(R.id.attr_background);
         sp = getActivity().getSharedPreferences("memberdata",Context.MODE_PRIVATE);
         editor = sp.edit();
-        issignin = sp.getBoolean("signin",true);
+        issignin = sp.getBoolean("signin",false);
         memberid = sp.getString("memberid","");
         memberemail = sp.getString("memberemail","");
         Log.v("grey","attsign="+issignin);
@@ -89,7 +89,7 @@ public class AttrPage extends ListFragment {
         protected LinkedList<AttrListModel> doInBackground(String... strings) {
             JSONArray jsonArray = null;
             data = new LinkedList<>();
-            jstring = JSONFuction.getJSONFromurl(HomePageActivity.urlIP + "/fsit04/getData");
+            jstring = JSONFuction.getJSONFromurl(new MyApplication().url + "/fsit04/getData");
             try {
                 jsonArray = new JSONArray(jstring);
                 for(int i=0;i<jsonArray.length();i++){
@@ -212,7 +212,6 @@ public class AttrPage extends ListFragment {
                         addFavorite(memberid,reslut.getAid());
                         new PrettyDialog(getContext())
                                 .setTitle("成功加入我的最愛")
-                                .setIcon(R.drawable.pdlg_icon_info)
                                 .setIconTint(R.color.pdlg_color_gray)
                                 .show();
                     }else {
@@ -222,36 +221,17 @@ public class AttrPage extends ListFragment {
 
                 }
             });
-            //mesbtn
+            //留言
             holder.mesbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                        Intent intent = new Intent(getActivity(),MessagePage.class);
-//                        startActivity(intent);
-                    new PrettyDialog(context)
-                            .setTitle("更換個人頭像")
-                            .setIcon(
-                                    R.drawable.pdlg_icon_info,     // icon resource
-                                    R.color.pdlg_color_green,      // icon tint
-                                    new PrettyDialogCallback() {   // icon OnClick listener
-                                        @Override
-                                        public void onClick() {
-                                            // Do what you gotta do
-                                        }
-                                    })
-                            .addButton(
-                                    "OK",					// button text
-                                    R.color.pdlg_color_white,		// button text color
-                                    R.color.pdlg_color_green,		// button background color
-                                    new PrettyDialogCallback() {		// button OnClick listener
-                                        @Override
-                                        public void onClick() {
-                                            // Do what you gotta do
-                                        }
-                                    }
-                            )
-
-                            .show();
+                    String url = new MyApplication().url +
+                            "/fsit04/attractions?total_id=" +
+                            data.get(position).getAid();
+                    Intent intent = new Intent(getActivity(),
+                            PhotoAlbumActivity.class);
+                    intent.putExtra("url", url);
+                    startActivity(intent);
                 }
             });
             return view;
@@ -268,12 +248,12 @@ public class AttrPage extends ListFragment {
         public ImageView itemimage;
         public TextView itemtitle;
         public TextView itemaddress;
-        public Button mesbtn;
-        public Button addbtn;
+        public ImageView mesbtn;
+        public ImageView addbtn;
     }
 
     private void addFavorite(String user_id,String total_id){
-        String url = HomePageActivity.urlIP + "/fsit04/User_favorite";
+        String url = new MyApplication().url + "/fsit04/User_favorite";
 
         final String p1 =user_id;
         final String p2=total_id;

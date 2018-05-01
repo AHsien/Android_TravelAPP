@@ -260,7 +260,7 @@ public class SharePhotoActivity extends AppCompatActivity {
      */
 
     private void uploadFile() {
-        String uploadUrl = HomePageActivity.urlIP + "/fsit04/saveFile";
+        String uploadUrl = new MyApplication().url + "/fsit04/saveFile";
         final byte[] data ;
         //路徑上傳
 //        File upload =new File(sdroot,"檔案的路徑");
@@ -297,7 +297,7 @@ public class SharePhotoActivity extends AppCompatActivity {
                     protected Map<String, String> getParams() throws AuthFailureError {
                         HashMap<String, String> m1 =new HashMap<>();
                         //使用者ID
-                        m1.put("user_id",HomePageActivity.userID);
+                        m1.put("user_id", new MyApplication().user_id);
                         //景點ID
                         m1.put("total_id","1");
                         //lat

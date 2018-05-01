@@ -46,7 +46,7 @@ public class FoodPage extends ListFragment {
     private String jstring;
     private JSONObject jsonObject;
     private MyfoodlistAdapter adapter;
-    private Button mesbtn,addbtn;
+    private ImageView mesbtn,addbtn;
     private float screenWidth,screenHeight,newHeight;
     private RequestQueue queue;
     private FrameLayout backgroundColor;
@@ -66,7 +66,7 @@ public class FoodPage extends ListFragment {
         backgroundColor = (FrameLayout)v.findViewById(R.id.food_background);
         sp = getActivity().getSharedPreferences("memberdata",Context.MODE_PRIVATE);
         editor = sp.edit();
-        issignin = sp.getBoolean("signin",true);
+        issignin = sp.getBoolean("signin",false);
         memberid = sp.getString("memberid","");
         memberemail = sp.getString("memberemail","");
         Log.v("grey","foodsign="+issignin);
@@ -89,7 +89,7 @@ public class FoodPage extends ListFragment {
             JSONArray jsonArray = null;
             data = new LinkedList<>();
             jstring = JSONFuction.getJSONFromurl(
-                    HomePageActivity.urlIP + "/fsit04/restaruant");
+                    new MyApplication().url + "/fsit04/restaruant");
             try {
                 jsonArray = new JSONArray(jstring);
                 for(int i=0;i<jsonArray.length();i++){
@@ -188,7 +188,6 @@ public class FoodPage extends ListFragment {
                         addFavorite(memberid,reslut.getAid());
                         new PrettyDialog(getContext())
                                 .setTitle("成功加入我的最愛")
-                                .setIcon(R.drawable.pdlg_icon_info)
                                 .setIconTint(R.color.pdlg_color_gray)
                                 .show();
                     }else {
@@ -197,11 +196,16 @@ public class FoodPage extends ListFragment {
                     }
                 }
             });
-            //mesbtn
+            //留言
             holder.mesbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(),MessagePage.class);
+                    String url = new MyApplication().url +
+                            "/fsit04/attractions?total_id=" +
+                            data.get(position).getAid();
+                    Intent intent = new Intent(getActivity(),
+                            PhotoAlbumActivity.class);
+                    intent.putExtra("url", url);
                     startActivity(intent);
                 }
             });
@@ -242,37 +246,12 @@ public class FoodPage extends ListFragment {
         public ImageView itemimage;
         public TextView itemtitle;
         public TextView itemaddress;
-        public Button mesbtn;
-        public Button addbtn;
+        public ImageView mesbtn;
+        public ImageView addbtn;
     }
-//     //* @param mail        信箱 test123@gmail.com
-//     //* @param password    密碼 test123
-//
-//    private void sighin(String mail,String password){
-//        final String p1=mail="test123@gmail.com";
-//        final String p2=password="test123";
-//        String url ="http://36.235.38.228:8080/fsit04/sighin.jsp";
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        Log.v("chad",response);
-//                    }
-//                }, null){
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                HashMap<String,String> m1 =new HashMap<>();
-//                m1.put("mail",p1);
-//                m1.put("password", p2);
-//                return m1;
-//            }
-//        };
-//
-//        queue.add(stringRequest);
-//    }
 
     private void addFavorite(String user_id,String total_id){
-        String url = HomePageActivity.urlIP + "/fsit04/User_favorite";
+        String url = new MyApplication().url + "/fsit04/User_favorite";
 
         final String p1 =user_id;
         final String p2=total_id;

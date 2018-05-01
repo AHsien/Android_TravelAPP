@@ -118,7 +118,7 @@ public class SearchPage extends AppCompatActivity {
     private void doSearch(String param) {
 
         final String p1 =param;
-        String url = String.format(HomePageActivity.urlIP + "/fsit04/Allviews");
+        String url = String.format(new MyApplication().url + "/fsit04/Allviews");
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -283,8 +283,7 @@ public class SearchPage extends AppCompatActivity {
     {
         public TextView itemtitle;
         public TextView itemaddress;
-        public ImageView itemimage;
-        public Button mesbtn,addbtn;
+        public ImageView itemimage, mesbtn, addbtn;
     }
 
     private void addtest(){
@@ -300,7 +299,7 @@ public class SearchPage extends AppCompatActivity {
     }
 
     private void addFavorite(String user_id,String total_id){
-        String url =HomePageActivity.urlIP+"/fsit04/User_favorite";
+        String url = new MyApplication().url +"/fsit04/User_favorite";
         Log.v("grey","user_id = "+ user_id);
         Log.v("grey","total_id="+total_id);
         final String p1 =user_id;

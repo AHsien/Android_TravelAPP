@@ -41,7 +41,7 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     private Button loginbtn;
-    private LoginButton loginButton;
+    private LoginButton loginButton_fb;
     private CallbackManager callbackManager;
     private RequestQueue queue;
     private LinearLayout backgroundColor;
@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         backgroundColor =findViewById(R.id.login_background);
         loginbtn = findViewById(R.id.login_button2);
+        //一般帳號登入
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,16 +75,22 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
+        loginButton_fb = (LoginButton) findViewById(R.id.login_button);
+        loginButton_fb.setReadPermissions("email");
         // If using in a fragment
 //        loginButton.setFragment(this);
         //設定登出入狀態
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        loginButton_fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (issign){
                     editor.putBoolean("signin", false);
+                    editor.putString("fb_name", null);
+                    editor.putString("fb_password", null);
+                    editor.putString("fb_email", null);
+                    editor.putString("fb_gender", null);
+                    editor.putString("fb_birthday", null);
+                    editor.putString("fb_loginType", null);
                     editor.commit();
                 }else {
                     editor.putBoolean("signin", true);
@@ -92,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         // Callback registration
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        loginButton_fb.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
@@ -104,10 +111,17 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 try {
-                                    String email = object.getString("email");
-                                    String birthday = object.getString("birthday");
                                     String name = object.getString("name");
+                                    String email = object.getString("email");
+                                    String gender = object.getString("gender");
+                                    String birthday = object.getString("birthday");
                                     sighin(email,name,"123","fb");
+                                    editor.putString("fb_name", name);
+                                    editor.putString("fb_password", "無");
+                                    editor.putString("fb_email", email);
+                                    editor.putString("fb_gender", gender);
+                                    editor.putString("fb_birthday", birthday);
+                                    editor.putString("fb_loginType", "FaceBook登入");
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -118,16 +132,17 @@ public class LoginActivity extends AppCompatActivity {
                 request.setParameters(params);
                 request.executeAsync();
             }
-
+            //登入取消
             @Override
             public void onCancel() {
-                // App code
-//                SignOut();
+                Toast.makeText(LoginActivity.this,
+                        "登入已取消", Toast.LENGTH_SHORT).show();
             }
-
+            //登入錯誤
             @Override
             public void onError(FacebookException exception) {
-                // App code
+                Toast.makeText(LoginActivity.this,
+                        "登入錯誤", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -146,9 +161,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void newmember(View view) {
-        Uri uri = Uri.parse("https://topic-timgyes123.c9users.io/phoneregister.html");
-        Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+        String url = "https://topic-timgyes123.c9users.io/phoneregister.html";
+        Intent intent = new Intent(LoginActivity.this,
+                PhotoAlbumActivity.class);
+        intent.putExtra("url", url);
         startActivity(intent);
+//        Uri uri = Uri.parse("https://topic-timgyes123.c9users.io/phoneregister.html");
+//        Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+//        startActivity(intent);
 
     }
 
@@ -157,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
         final String p2=password;
         final String p3=type;
         final String p4=name;
-        String url = HomePageActivity.urlIP + "/fsit04/app/sighin";
+        String url = new MyApplication().url + "/fsit04/app/sighin";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -183,7 +203,6 @@ public class LoginActivity extends AppCompatActivity {
                             } catch (JSONException e) {
                                 Log.v("brad", e.toString());
                             }
-
                         }
                     }
                 }, null){
@@ -202,8 +221,8 @@ public class LoginActivity extends AppCompatActivity {
     private void signsuccess(){
         new AlertDialog.Builder(LoginActivity.this)
                 .setTitle("")
-                .setMessage("success")
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                .setMessage("登入成功")
+                .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent(getApplicationContext(),HomePageActivity.class);
@@ -212,24 +231,4 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }).show();
     }
-
-//    private void SignOut(){
-//
-//        new AlertDialog.Builder(LoginActivity.this)
-//                .setTitle("")
-//                .setMessage("sign out")
-//                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                        editor.putBoolean("signin",false);
-//                        editor.putString("memberid","");
-//                        editor.putString("memberemail","");
-//                        editor.commit();
-//                        Intent intent = new Intent(getApplicationContext(),HomePageActivity.class);
-//                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                        startActivity(intent);
-//                    }
-//                }).show();
-//    }
 }

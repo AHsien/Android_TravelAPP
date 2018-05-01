@@ -12,10 +12,11 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="#00BFFF"
-        android:text="本APP 由  FSIT04學員
-劉昭延、粘子銓、倪偉城、蔡篤賢
-共同開發
-版權所有，翻印必究"
+        android:text="開發人員名單：
+                        劉昭延
+                        粘子詮
+                        倪偉城
+                        蔡篤賢"
         />
 
     <Button

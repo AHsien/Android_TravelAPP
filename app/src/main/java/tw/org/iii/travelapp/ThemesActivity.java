@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,13 +15,18 @@ import android.widget.Toast;
 
 import com.githang.statusbar.StatusBarCompat;
 
+import cyd.awesome.material.AwesomeButton;
+
 public class ThemesActivity extends AppCompatActivity {
     private LinearLayout themes_layout;
     private String list[] = {"黃色", "藍色", "綠色", "古白色", "甘露綠", "淡藍色", "淡黃色(系統預設)"};
-    private String backgroundColor;
+    private String backgroundColor, colorName;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private String[] color;
+    private AwesomeButton awesomeButton;
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +36,10 @@ public class ThemesActivity extends AppCompatActivity {
 
         setTitle("佈景主題更換");
         themes_layout = findViewById(R.id.themes_main);
+        awesomeButton = findViewById(R.id.setBackgroundColor);
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.profile_menu);
+        setSupportActionBar(toolbar);
         getThemeData();
 
         init();
@@ -59,7 +69,20 @@ public class ThemesActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 backgroundColor = (String)parent.getItemAtPosition(position);
+                colorName = backgroundColor;
                 setThemes();
+            }
+        });
+        //套用按鈕
+        awesomeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backgroundColor = getBackgroundColor(backgroundColor);
+                editor.putString("backgroundColor", backgroundColor);
+                editor.commit();
+                Toast.makeText(ThemesActivity.this,
+                        "背景顏色 (" + colorName + ")已套用",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -67,9 +90,7 @@ public class ThemesActivity extends AppCompatActivity {
     private void getThemeData(){
         sp = getSharedPreferences("memberdata", MODE_PRIVATE);
         editor = sp.edit();
-
         String color = sp.getString("backgroundColor", null);
-        Log.v("brad", "color = " + color);
         //if判斷句用來解決清除app資料時，無法獲得資料而造成的例外
         if(color != null) {
             switch (color) {
@@ -96,14 +117,6 @@ public class ThemesActivity extends AppCompatActivity {
                     break;
             }
         }
-    }
-    //套用按鈕
-    public void apply(View view){
-        backgroundColor = getBackgroundColor(backgroundColor);
-        editor.putString("backgroundColor", backgroundColor);
-        editor.commit();
-        Toast.makeText(this, "背景顏色 (" + backgroundColor + ")已套用",
-                Toast.LENGTH_SHORT).show();
     }
     //設定背景顏色
     private void setThemes(){

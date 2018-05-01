@@ -48,7 +48,7 @@ public class HomePageActivity extends AppCompatActivity {
     private LinearLayout iv_home, iv_guide, iv_camera, iv_favorite, iv_setting;
     private float screenWidth, screenHeight, newHeight;
     public static String urlIP = "http://118.170.13.75:8080";
-    public static String userID = "1";
+    public static String userID = "5";
     private File photoFile, storageDir;
     private Uri photoURI;
 
@@ -163,18 +163,6 @@ public class HomePageActivity extends AppCompatActivity {
         fragments.add(new HotPage());
         fragments.add(new AttrPage());
         fragments.add(new FoodPage());
-
-//        sp = getSharedPreferences("memberdata",MODE_PRIVATE);
-//        editor = sp.edit();
-//        issignin = sp.getBoolean("signin",false);
-//        memberid = sp.getString("memberid","0");
-//        memberemail = sp.getString("memberemail","xxx");
-//
-//        editor.putBoolean("signin",false);
-//        editor.putString("memberid","");
-//        editor.putString("memberemail","");
-//        editor.commit();
-
     }
 
     private void inittablayout(){
@@ -231,8 +219,14 @@ public class HomePageActivity extends AppCompatActivity {
         iv_guide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomePageActivity.this, MapsActivity.class);
-                startActivity(intent);
+                if (isSignIn) {
+                    Intent intent = new Intent(HomePageActivity.this, MapsActivity.class);
+                    startActivity(intent);
+                }else {
+                    Intent loginIntent = new Intent(
+                            HomePageActivity.this, LoginActivity.class);
+                    startActivity(loginIntent);
+                }
             }
         });
         //相機

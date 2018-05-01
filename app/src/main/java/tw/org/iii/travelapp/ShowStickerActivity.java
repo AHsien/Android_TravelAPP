@@ -25,7 +25,7 @@ public class ShowStickerActivity extends AppCompatActivity {
         StatusBarCompat.setStatusBarColor(this, Color.parseColor("#4f4f4f"));
 
         photoView = findViewById(R.id.showSticker_photoView);
-        sp = getSharedPreferences("sticker", MODE_PRIVATE);
+        sp = getSharedPreferences("memberdata", MODE_PRIVATE);
         String sticker = sp.getString("sticker", null);
 
         Intent intent = getIntent();

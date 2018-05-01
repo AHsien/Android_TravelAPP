@@ -10,6 +10,9 @@ import android.widget.ImageView;
 
 import com.githang.statusbar.StatusBarCompat;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class WelcomPageActivity extends AppCompatActivity {
     private ImageView imageView;
 
@@ -18,6 +21,7 @@ public class WelcomPageActivity extends AppCompatActivity {
     private boolean issignin;
     private String memberid;
     private String memberemail;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +30,42 @@ public class WelcomPageActivity extends AppCompatActivity {
         //變更通知列底色
         StatusBarCompat.setStatusBarColor(this, Color.parseColor("#4f4f4f"));
 //        init();
+        timer = new Timer();
+        timer.schedule(new MyTask(), 3*1000);
+
         imageView = findViewById(R.id.welcome_image);
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(WelcomPageActivity.this,
-                        HomePageActivity.class);
-                startActivity(intent);
-                finish();
+                gotoHomePage();
             }
         });
+    }
+
+    private class MyTask extends TimerTask{
+
+        @Override
+        public void run() {
+            gotoHomePage();
+        }
+    }
+
+    private void gotoHomePage(){
+        Intent intent = new Intent(WelcomPageActivity.this,
+                HomePageActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        if(timer != null){
+            timer.cancel();
+            timer.purge();
+            timer = null;
+        }
+        super.finish();
     }
 
     private void init(){

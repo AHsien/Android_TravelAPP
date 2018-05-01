@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,10 @@ public class ProfileActivity extends AppCompatActivity {
     private MyAdapter myAdapter;
     private TextView item_content;
     private View item;
-
+    private Toolbar toolbar;
+    private SharedPreferences sp;
+    private String fb_name, fb_password, fb_email, fb_gender,
+            fb_birthday, fb_loginType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,21 +40,36 @@ public class ProfileActivity extends AppCompatActivity {
 
         setTitle("個人資料");
         profile_list = findViewById(R.id.profile_list);
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.profile_menu);
+        setSupportActionBar(toolbar);
 
-        init();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sp = getSharedPreferences("memberdata", MODE_PRIVATE);
+        sp = getSharedPreferences("memberdata", MODE_PRIVATE);
         String backGroundColor = sp.getString("backgroundColor", "#FFFFDD");
         profile_list.setBackgroundColor(Color.parseColor(backGroundColor));
+        fb_name = sp.getString("fb_name", "");
+        fb_password = sp.getString("fb_password", "");
+        fb_email = sp.getString("fb_email", "");
+        fb_gender = sp.getString("fb_gender", "");
+        if (fb_gender.equals("male")){
+            fb_gender = "男性";
+        }else if (fb_gender.equals("female")){
+            fb_gender = "女性";
+        }
+        fb_birthday = sp.getString("fb_birthday", "");
+        fb_loginType = sp.getString("fb_loginType", "未登入");
+        init();
     }
 
     private void init(){
-        data1 = new String[]{"帳號", "密碼"};
-        data2 = new String[]{"0912345678", "********"};
+        data1 = new String[]{"帳號", "密碼", "姓名", "性別", "生日", "登入方式"};
+        data2 = new String[]{
+                fb_email, fb_password, fb_name , fb_gender, fb_birthday, fb_loginType};
         myAdapter = new MyAdapter(ProfileActivity.this);
         profile_list.setAdapter(myAdapter);
         profile_list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);

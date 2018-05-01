@@ -19,6 +19,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,11 +47,12 @@ import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 
-public class SettingActivity extends Activity {
-    static final int REQUEST_TAKE_PHOTO = 1;
-    static final int IMAGE_REQUEST_CODE = 2;
-    static final int SELECT_PIC_NOUGAT = 3;
+public class SettingActivity extends AppCompatActivity {
+    final int REQUEST_TAKE_PHOTO = 1;
+    final int IMAGE_REQUEST_CODE = 2;
+    final int SELECT_PIC_NOUGAT = 3;
     private ListView setting_list;
     private PopupWindow popupWindow;
     private Button btnConfirm;
@@ -89,7 +91,7 @@ public class SettingActivity extends Activity {
         super.onResume();
         //設定背景顏色
         setBackgroundColor();
-
+        isSignIn = sp.getBoolean("signin", false);
         sticker = sp.getString("sticker", null);
         if(sticker != null){
             stickerFile = new File(sticker);
@@ -140,8 +142,12 @@ public class SettingActivity extends Activity {
                         break;
                     //我的相片集
                     case 3:
-                        Uri uri = Uri.parse(HomePageActivity.urlIP + "/fsit04/album");
-                        Intent galleryIntent = new Intent(Intent.ACTION_VIEW, uri);
+                        String url = new MyApplication().url +
+                                "/fsit04/appimg?user_id=" +
+                                new MyApplication().user_id;
+                        Intent galleryIntent = new Intent(
+                                SettingActivity.this, PhotoAlbumActivity.class);
+                        galleryIntent.putExtra("url", url);
                         startActivity(galleryIntent);
                         break;
                     //關於我
@@ -219,11 +225,6 @@ public class SettingActivity extends Activity {
     private void setBackgroundColor(){
         String backGroundColor = sp.getString("backgroundColor", "#FFFFDD");
         backgroundColor.setBackgroundColor(Color.parseColor(backGroundColor));
-//        if (backgroundColor != null){
-//            backgroundColor.setBackgroundColor(Color.parseColor(backGroundColor));
-//        }else{
-//            backgroundColor.setBackgroundColor(Color.parseColor("#ff0000"));
-//        }
     }
 
     @Override
@@ -283,8 +284,14 @@ public class SettingActivity extends Activity {
         iv_guide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SettingActivity.this, MapsActivity.class);
-                startActivity(intent);
+                if (isSignIn) {
+                    Intent intent = new Intent(SettingActivity.this, MapsActivity.class);
+                    startActivity(intent);
+                }else {
+                    Intent loginIntent = new Intent(
+                            SettingActivity.this, LoginActivity.class);
+                    startActivity(loginIntent);
+                }
             }
         });
         //相機
@@ -298,7 +305,6 @@ public class SettingActivity extends Activity {
         iv_favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isSignIn = sp.getBoolean("signin", false);
                 if (isSignIn) {
                     Intent intent = new Intent(SettingActivity.this, FavoriteActivity.class);
                     startActivity(intent);
@@ -322,31 +328,58 @@ public class SettingActivity extends Activity {
     }
     //關於我選單
     private void gotoAboutMe() {
-        View view = LayoutInflater.from(this)
-                //設定輸出的layout
-                .inflate(R.layout.layout_about_me, null);
-        popupWindow = new PopupWindow(view);
-        //設定popupWindow的寬、高
-        popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP){
-                    popupWindow.dismiss();
-                }
-                return true;
-            }
-        });
+        final PrettyDialog dialog = new PrettyDialog(this);
+            dialog.setTitle("開發人員名單")
+                .setIcon(
+                    R.drawable.pdlg_icon_info,     // icon resource
+                    R.color.pdlg_color_green,      // icon tint
+                    new PrettyDialogCallback() {   // icon OnClick listener
+                        @Override
+                        public void onClick() {
+                            // Do what you gotta do
+                        }
+                    })
+                .setMessage("劉昭延" + "\n" +
+                            "粘子詮" + "\n" +
+                            "倪偉城" + "\n" +
+                            "蔡篤賢" + "\n")
+                .addButton(
+                        "確認",
+                        R.color.pdlg_color_white,
+                        R.color.pdlg_color_green,
+                        new PrettyDialogCallback() {
+                            @Override
+                            public void onClick() {
+                                dialog.dismiss();
+                            }
+                        }
+                ).show();
 
-        btnConfirm =  view.findViewById(R.id.confirm);
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                popupWindow.dismiss();
-            }
-        });
-        popupWindow.showAtLocation(view, Gravity.CENTER_HORIZONTAL, 0, 0);
+//        View view = LayoutInflater.from(this)
+//                //設定輸出的layout
+//                .inflate(R.layout.layout_about_me, null);
+//        popupWindow = new PopupWindow(view);
+//        //設定popupWindow的寬、高
+//        popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+//        popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+//        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_UP){
+//                    popupWindow.dismiss();
+//                }
+//                return true;
+//            }
+//        });
+//
+//        btnConfirm =  view.findViewById(R.id.confirm);
+//        btnConfirm.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                popupWindow.dismiss();
+//            }
+//        });
+//        popupWindow.showAtLocation(view, Gravity.CENTER_HORIZONTAL, 0, 0);
 
     }
     //BaseAdapter for ListView

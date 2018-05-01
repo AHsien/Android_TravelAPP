@@ -46,6 +46,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
+
 public class FavoriteActivity extends AppCompatActivity {
 
     private ListView favorite_list;
@@ -66,6 +69,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private boolean issignin;
     private String memberid;
     private String memberemail;
+    private String myUrl = new MyApplication().url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +83,7 @@ public class FavoriteActivity extends AppCompatActivity {
         editor = sp.edit();
         issignin = sp.getBoolean("signin",true);
         memberid = sp.getString("memberid","");
+        memberid = "5";
         memberemail = sp.getString("memberemail","");
 
         findView();
@@ -96,8 +101,7 @@ public class FavoriteActivity extends AppCompatActivity {
         getScreenSize();
         MyAsyncTask myAsyncTask = new MyAsyncTask();
         myAsyncTask.execute(
-                HomePageActivity.urlIP +
-                        "/fsit04/User_favorite?user_id=" + memberid);
+                myUrl + "/fsit04/User_favorite?user_id=" + memberid);
 //        init();
     }
     //取得螢幕大小
@@ -245,16 +249,40 @@ public class FavoriteActivity extends AppCompatActivity {
             removeTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String total_Id = dataList.get(position).getTotal_id();
-                    deleteFavorite(memberid, total_Id);
-                    dataList.remove(position);
-                    myAdapter.notifyDataSetChanged();
+                    final PrettyDialog prettyDialog = new PrettyDialog(FavoriteActivity.this);
+                    prettyDialog.setMessage("從我的最愛移除")
+                            .setIcon(R.drawable.pdlg_icon_info,
+                                    R.color.pdlg_color_green, new PrettyDialogCallback() {
+                                        @Override
+                                        public void onClick() {
+
+                                        }
+                                    })
+                            .addButton("確定", R.color.pdlg_color_white,
+                                    R.color.pdlg_color_green, new PrettyDialogCallback() {
+                                        @Override
+                                        public void onClick() {
+                                            String total_Id = dataList.get(position).getTotal_id();
+                                            deleteFavorite(memberid, total_Id);
+                                            dataList.remove(position);
+                                            myAdapter.notifyDataSetChanged();
+                                            prettyDialog.dismiss();
+                                        }
+                                    })
+                            .addButton("取消", R.color.pdlg_color_white,
+                                    R.color.pdlg_color_green, new PrettyDialogCallback() {
+                                        @Override
+                                        public void onClick() {
+                                            prettyDialog.dismiss();
+                                        }
+                                    }).show();
+
                 }
             });
             //設定title
             String stitle = dataList.get(position).getStitle();
             String total_id = dataList.get(position).getTotal_id();
-            item_title.setText(total_id + "." + stitle);
+            item_title.setText(stitle);
             //設定photo
             GlideApp
                     .with(FavoriteActivity.this)
@@ -338,7 +366,7 @@ public class FavoriteActivity extends AppCompatActivity {
         final String p2=total_id;
 
         String url =
-                HomePageActivity.urlIP + "/fsit04/User_favorite?user=" + memberid;
+                new MyApplication().url + "/fsit04/User_favorite?user=" + memberid;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -363,7 +391,7 @@ public class FavoriteActivity extends AppCompatActivity {
      */
     private void deleteFavorite(String user_id,String total_id){
         String url =
-                HomePageActivity.urlIP + "/fsit04/User_favorite?user=" + memberid;
+                new MyApplication().url + "/fsit04/User_favorite?user=" + memberid;
         final String p1 = user_id;
         final String p2 = total_id;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -392,7 +420,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private void getFavorite(String user_id){
         final String p1 = user_id;
         String getFavoriteUrl =
-                HomePageActivity.urlIP + "/fsit04/User_favorite?user_id=" + memberid;
+                new MyApplication().url + "/fsit04/User_favorite?user_id=" + memberid;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, getFavoriteUrl,
                 new Response.Listener<String>() {
                     @Override
@@ -443,7 +471,7 @@ public class FavoriteActivity extends AppCompatActivity {
      */
     private void getRest(){
         String url =
-                HomePageActivity.urlIP + "/fsit04/restaruant";
+                new MyApplication().url + "/fsit04/restaruant";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override

@@ -11,7 +11,7 @@
         android:text="姓名"
         android:textStyle="bold"
         android:textSize="20sp"
-
+        android:paddingLeft="10sp"
         />
 
     <TextView
@@ -21,7 +21,7 @@
         android:text="小明"
         android:textStyle="bold"
         android:textSize="16sp"
-        android:textColor="#87CEFA"
-
+        android:textColor="#00f"
+        android:paddingLeft="10sp"
         />
 </LinearLayout>

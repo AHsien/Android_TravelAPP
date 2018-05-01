@@ -68,4 +68,7 @@ dependencies {
 
     //AndroidLikeButton
     compile 'com.jackandphantom.android:androidlikebutton:1.2.0'
+
+    //awesome-material Button
+    compile 'cyd.awesome.android:awesome-material:1.0'
 }

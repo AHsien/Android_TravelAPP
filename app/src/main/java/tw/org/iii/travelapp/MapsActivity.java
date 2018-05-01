@@ -44,6 +44,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cyd.awesome.material.AwesomeButton;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback  {
 
     private GoogleMap mMap;
@@ -61,6 +63,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean issignin;
     private String memberid;
     private String memberemail;
+    private String myUrl = new MyApplication().url;
+    private AwesomeButton awesomeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,19 +85,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         //TODO 從intent拿到資料後把要呈現的資料加入到  destinations是要畫標記的陣列  跟  data是LISTVIEW要呈現的資料
         queue= Volley.newRequestQueue(this);
+
         dataList = new ArrayList<>();
         dataList2 = new ArrayList<>();
         getFavorite(memberid);
         MyAsyncTask myAsyncTask = new MyAsyncTask();
         myAsyncTask.execute(
-                HomePageActivity.urlIP +
-                        "/fsit04/User_favorite?user_id=" +memberid);
+                myUrl + "/fsit04/User_favorite?user_id=" +memberid);
 //        marker = new Marker[destinations.size()];
     }
     //找出DragView 跟他裡面的ListView
     private  void getDragViewAndSetListView(){
         dragView = findViewById(R.id.myDragView);
+        awesomeButton = findViewById(R.id.gotoMap);
         listView = dragView.getListView();
+        awesomeButton = dragView.getAwesomeButton();
         adapter = new MyAdapter(this);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -115,6 +121,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat, lng)));
                 //設定視角的大小程度
                 mMap.moveCamera(CameraUpdateFactory.zoomTo(13.0f));
+            }
+        });
+        //開始導航
+        awesomeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Search for restaurants nearby
+                //google.navigation:q=a+street+address
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + lat + "," + lng);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
             }
         });
     }
@@ -142,16 +162,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addGroundOverlay(imgOnMap);
     }
     //開始導航
-    public void gotoMap(View view) {
-        // Search for restaurants nearby
-        //google.navigation:q=a+street+address
-        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + lat + "," + lng);
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        if (mapIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(mapIntent);
-        }
-    }
+//    public void gotoMap(View view) {
+//        // Search for restaurants nearby
+//        //google.navigation:q=a+street+address
+//        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + lat + "," + lng);
+//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//        mapIntent.setPackage("com.google.android.apps.maps");
+//        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+//            startActivity(mapIntent);
+//        }
+//    }
     //標記的clickListener
     private class MyOnMarkerClickListener implements GoogleMap.OnMarkerClickListener{
         @Override
@@ -272,7 +292,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void getFavorite(String user_id){
         final String p1 = user_id;
         String getFavoriteUrl =
-                HomePageActivity.urlIP +
+                new MyApplication().url +
                         "/fsit04/User_favorite?user_id=" + memberid;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, getFavoriteUrl,
                 new Response.Listener<String>() {

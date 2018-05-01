@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -45,7 +46,7 @@ public class HotPage extends ListFragment {
     private String jstring;
     private JSONObject jsonObject;
     private MyhotlistAdapter adapter;
-    private Button mesbtn,addbtn;
+    private ImageView mesbtn,addbtn;
     private float screenWidth,screenHeight,newHeight;
     private RequestQueue queue;
     private FrameLayout backgroundColor;
@@ -91,7 +92,7 @@ public class HotPage extends ListFragment {
             JSONArray jsonArray = null;
             data = new LinkedList<>();
             jstring = JSONFuction.getJSONFromurl(
-                    HomePageActivity.urlIP + "/fsit04/User_favorite?user_id=3");
+                    new MyApplication().url + "/fsit04/User_favorite?user_id=3");
             try {
                 jsonArray = new JSONArray(jstring);
                 for(int i=0;i<jsonArray.length();i++){
@@ -204,16 +205,15 @@ public class HotPage extends ListFragment {
                     startActivity(intent);
                 }
             });
-            //addbtn
+            //收藏
             holder.addbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (issignin==true){
                         reslut = data.get(position);
                         addFavorite(memberid,reslut.getAid());
-                        new PrettyDialog(getContext())
-                                .setTitle("成功加入我的最愛")
-                                .setIcon(R.drawable.pdlg_icon_info)
+                        PrettyDialog dialog = new PrettyDialog(getContext());
+                        dialog.setTitle("成功加入我的最愛")
                                 .setIconTint(R.color.pdlg_color_gray)
                                 .show();
                     }else {
@@ -223,39 +223,17 @@ public class HotPage extends ListFragment {
 
                 }
             });
-            //mesbtn
+            //留言
             holder.mesbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                        Intent intent = new Intent(getActivity(),MessagePage.class);
-//                        startActivity(intent);
-                    new PrettyDialog(context)
-                            .setTitle("更換個人頭像")
-                            .setIcon(
-                                    R.drawable.pdlg_icon_info,     // icon resource
-                                    R.color.pdlg_color_green,      // icon tint
-                                    new PrettyDialogCallback() {   // icon OnClick listener
-                                        @Override
-                                        public void onClick() {
-                                            // Do what you gotta do
-                                            Log.v("brad", "Icon");
-                                        }
-                                    })
-                            .addButton(
-                                    "OK",					// button text
-                                    R.color.pdlg_color_white,		// button text color
-                                    R.color.pdlg_color_green,		// button background color
-                                    new PrettyDialogCallback() {		// button OnClick listener
-                                        @Override
-                                        public void onClick() {
-                                            // Do what you gotta do
-                                            Log.v("brad", "OK");
-
-                                        }
-                                    }
-                            )
-
-                            .show();
+                    String url = new MyApplication().url +
+                            "/fsit04/attractions?total_id=" +
+                            data.get(position).getAid();
+                    Intent intent = new Intent(getActivity(),
+                            PhotoAlbumActivity.class);
+                    intent.putExtra("url", url);
+                    startActivity(intent);
                 }
             });
             return view;
@@ -272,12 +250,12 @@ public class HotPage extends ListFragment {
         public ImageView itemimage;
         public TextView itemtitle;
         public TextView itemaddress;
-        public Button mesbtn;
-        public Button addbtn;
+        public ImageView mesbtn;
+        public ImageView addbtn;
     }
 
     private void addFavorite(String user_id,String total_id){
-        String url = HomePageActivity.urlIP + "/fsit04/User_favorite";
+        String url = new MyApplication().url + "/fsit04/User_favorite";
 
         final String p1 =user_id;
         final String p2=total_id;

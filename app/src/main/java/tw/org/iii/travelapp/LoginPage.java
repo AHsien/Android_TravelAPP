@@ -63,7 +63,7 @@ public class LoginPage extends AppCompatActivity{
         loginbtn = findViewById(R.id.login_button);
         newbtn = findViewById(R.id.login_newbutton);
         backgroundColor = findViewById(R.id.login_page_background);
-
+        //登入
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,13 +74,18 @@ public class LoginPage extends AppCompatActivity{
                 loginpasswd.setText("");
             }
         });
-
+        //註冊
         newbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = Uri.parse("https://topic-timgyes123.c9users.io/phoneregister.html");
-                Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                String url = "https://topic-timgyes123.c9users.io/phoneregister.html";
+                Intent intent = new Intent(LoginPage.this,
+                        PhotoAlbumActivity.class);
+                intent.putExtra("url", url);
                 startActivity(intent);
+//                Uri uri = Uri.parse("https://topic-timgyes123.c9users.io/phoneregister.html");
+//                Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+//                startActivity(intent);
             }
         });
     }
@@ -97,7 +102,7 @@ public class LoginPage extends AppCompatActivity{
         final String p2=password;
         final String p3=type;
         final String p4=name;
-        String url =HomePageActivity.urlIP + "/fsit04/app/sighin";
+        String url = new MyApplication().url + "/fsit04/app/sighin";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -143,7 +148,10 @@ public class LoginPage extends AppCompatActivity{
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
+                        Toast.makeText(LoginPage.this,
+                                "請重新輸入帳號密碼",
+                                Toast.LENGTH_SHORT).show();
+//                        finish();
                     }
                 }).show();
     }
