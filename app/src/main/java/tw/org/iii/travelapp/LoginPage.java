@@ -55,7 +55,7 @@ public class LoginPage extends AppCompatActivity{
 
         sp = getSharedPreferences("memberdata",MODE_PRIVATE);
         editor = sp.edit();
-        issign = sp.getBoolean("signin",true);
+        issign = sp.getBoolean("signin",false);
         memberid = sp.getString("member","0");
 
         loginaccount = findViewById(R.id.login_account);

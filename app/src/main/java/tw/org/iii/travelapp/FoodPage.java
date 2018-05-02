@@ -181,8 +181,7 @@ public class FoodPage extends ListFragment {
             holder.addbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.v("grey","signfood="+issignin);
-                    Log.v("grey","food_id= "+reslut.getAid());
+                    issignin = sp.getBoolean("signin", false);
                     if (issignin==true){
                         reslut = data.get(position);
                         addFavorite(memberid,reslut.getAid());

@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
 
         sp = getSharedPreferences("memberdata",MODE_PRIVATE);
         editor = sp.edit();
-        issign = sp.getBoolean("signin",true);
+        issign = sp.getBoolean("signin",false);
 
         callbackManager = CallbackManager.Factory.create();
         backgroundColor =findViewById(R.id.login_background);

@@ -81,7 +81,7 @@ public class FavoriteActivity extends AppCompatActivity {
 
         sp = getSharedPreferences("memberdata",MODE_PRIVATE);
         editor = sp.edit();
-        issignin = sp.getBoolean("signin",true);
+        issignin = sp.getBoolean("signin",false);
         memberid = sp.getString("memberid","");
         memberid = "5";
         memberemail = sp.getString("memberemail","");

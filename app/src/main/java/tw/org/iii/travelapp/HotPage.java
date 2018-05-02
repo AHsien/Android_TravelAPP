@@ -69,7 +69,7 @@ public class HotPage extends ListFragment {
         new attrHttpasync().execute();
         sp = getActivity().getSharedPreferences("memberdata",Context.MODE_PRIVATE);
         editor = sp.edit();
-        issignin = sp.getBoolean("signin",true);
+        issignin = sp.getBoolean("signin",false);
         memberid = sp.getString("memberid","");
         memberemail = sp.getString("memberemail","");
         Log.v("grey","hotsign="+issignin);
@@ -209,6 +209,7 @@ public class HotPage extends ListFragment {
             holder.addbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    issignin = sp.getBoolean("signin", false);
                     if (issignin==true){
                         reslut = data.get(position);
                         addFavorite(memberid,reslut.getAid());

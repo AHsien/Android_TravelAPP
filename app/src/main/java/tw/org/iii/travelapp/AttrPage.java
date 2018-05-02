@@ -205,8 +205,7 @@ public class AttrPage extends ListFragment {
             holder.addbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.v("grey","signatt="+issignin);
-                    Log.v("grey","att_id= "+reslut.getAid());
+                    issignin = sp.getBoolean("signin", false);
                     if (issignin==true){
                         reslut = data.get(position);
                         addFavorite(memberid,reslut.getAid());
