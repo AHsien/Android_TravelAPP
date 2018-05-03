@@ -46,6 +46,7 @@ public class MyDragView extends LinearLayout{
     private AwesomeButton awesomeButton;
     private ArrayList<DataStation> dataList;
     private Context drawView_context;
+    private LinearLayout bgColor;
 
     public MyDragView(Context context){
         super(context);
@@ -76,13 +77,18 @@ public class MyDragView extends LinearLayout{
         return listView;
     }
 
+    public LinearLayout getLinearLayout(){
+        return  bgColor;
+    }
+
     public AwesomeButton getAwesomeButton(){
         awesomeButton = myView.findViewById(R.id.gotoMap);
         return awesomeButton;
     }
-    //初始化MyListView
+    //初始化MyListView及bgColor
     private void intitListView(){
         listView =myView.findViewById(R.id.listview);
+        bgColor = myView.findViewById(R.id.bgColor);
     }
     //DragView 布局的時候 先設定初始位置0;
     @Override

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -57,7 +58,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double lat, lng;
     private ArrayList<DataStation> dataList, dataList2;
     private RequestQueue queue;
-
+    private LinearLayout bgColor;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private boolean issignin;
@@ -99,6 +100,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         dragView = findViewById(R.id.myDragView);
         awesomeButton = findViewById(R.id.gotoMap);
         listView = dragView.getListView();
+        bgColor = dragView.getLinearLayout();
         awesomeButton = dragView.getAwesomeButton();
         adapter = new MyAdapter(this);
         listView.setAdapter(adapter);
@@ -267,6 +269,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             getDragViewAndSetListView();
             String backGroundColor = sp.getString("backgroundColor", "#FFFFDD");
             listView.setBackgroundColor(Color.parseColor(backGroundColor));
+            bgColor.setBackgroundColor(Color.parseColor(backGroundColor));
         }
         //從URL獲取JSON字串
         private String getData(String url){
