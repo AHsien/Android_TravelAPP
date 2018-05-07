@@ -194,7 +194,7 @@ public class FavoriteActivity extends AppCompatActivity {
         ArrayList<String> photos = dataList.get(position).getPhoto_url();
 
         Intent intent = new Intent(FavoriteActivity.this, DetailActivity.class);
-        intent.putExtra("stitle", total_id + "." + stitle);
+        intent.putExtra("stitle", stitle);
         intent.putExtra("xbody", xbody);
         intent.putExtra("img_url", img_url);
         intent.putExtra("lat", lat);

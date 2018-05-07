@@ -11,7 +11,7 @@ public class MyApplication extends Application{
     public String url, user_id;
 
     public MyApplication() {
-        url = "http://118.170.11.89:8080";
+        url = "http://36.234.3.180:8080";
         user_id = "5";
     }
 

@@ -47,7 +47,7 @@ public class HomePageActivity extends AppCompatActivity {
     private ArrayList<Fragment> fragments;
     private LinearLayout iv_home, iv_guide, iv_camera, iv_favorite, iv_setting;
     private float screenWidth, screenHeight, newHeight;
-    public static String urlIP = "http://118.170.11.89:8080";
+    public static String urlIP = "http://36.234.3.180:8080";
     public static String userID = "5";
     private File photoFile, storageDir;
     private Uri photoURI;
